@@ -1,0 +1,138 @@
+   ###########################################################
+
+    #  Computer Project #11 EgoNet.py
+    #import statements
+    #  Algorithm
+    #Class EgoNet
+    #   given __init__
+    #get_alter_node
+    #   iterates
+    #   returns alter node
+    #get_ego
+    #   returns ego
+    #get_circles_names
+    #   gets names of circles
+    #   returns names
+    #get_circle
+    #   returns circle
+    #get_alters
+    #   returns key in social network
+    #get_alter_node_count
+    #   returns count of alter node
+    #get_ego_net_features
+    #   return ego net features
+    #get_ego_net_feature
+    #   return features
+    #get_feature_pos
+    #   returns integer key
+    #get_alter_connections
+    #   adds connection between two alters
+    #add_circle
+    #   indexes
+    #   adds circle
+    #add_connection_between_alters
+    #   add alters to eachother
+    #add_alter_node
+    #   adds alter node
+    ###########################################################
+
+import Circle
+
+class EgoNet:
+    def __init__(self,ego,ego_net_features):
+        self.__ego = ego #Represents the Ego node for the EgoNet. type - Node object
+        self.__social_network = {} # Represents the social network graph. type - dict where key = Node object 			        and value = list of Node objects key is connected to
+        self.__social_network[ego] = set() # Represents the social network graph. type - dict where key = Node object 			        and value = list of Node objects key is connected to
+        self.__alter_node_count = 0 # Represents the total number of alter nodes connected to our Ego
+        self.__circles = {} #Represents the circles formed in our EgoNet. type - dict where key = circle name		      and value = set of Node objects in the circle
+        self.__ego_net_features = ego_net_features # Represents the features for our Ego Net. type - dict where key = feature			           position in feature file (type - int) and value = tuple of feature name and			          feature id. This does not contain Feature objects but just strings. 
+
+
+    def get_alter_node(self,node_id):
+        for k in self.__social_network.keys():#iterates
+            if k.get_id() == node_id:#gets id
+                return k#returns id
+        #else:
+        return None
+        
+    def get_ego(self):
+        return self.__ego#returns ego
+    
+    def get_circle_names(self):
+        names = []#creates tuple
+        for key in self.__circles.keys():#iterates key in circles
+            names.append(key)#appends key to names
+        return names#names
+
+    def get_circle(self, circle_name):
+        return self.__circles[circle_name]#returns circle_name
+    
+    def get_alters(self):
+        for key in self.__self_social_network.keys():#iterates key in social network
+            return key#return key
+
+    def get_alter_node_count(self):
+        #self.__alter_node_count += 1
+        return self.__alter_node_count#return alter node count
+
+    def get_ego_net_features(self):
+        return self.__ego_net_features#return features
+
+    def get_ego_net_feature(self, feature):
+        return self.__ego_net_features[feature]#indexes and returns feature
+
+    def get_feature_pos(self, feature_name, feature_id):
+        for k,v in self.__ego_net_features.items():#key and value in features
+            #tup = feature_name,feature_id
+            #print(tup)
+            if v == (feature_name, feature_id):#if value matches
+                #print(k)
+                return int(k)#return key
+            #else:
+            #    return None
+    
+    def get_alter_connections(self, alter):
+        return self.__social_network[alter]#indexes and returns
+    
+    def add_circle(self, circle_name, alters):
+        #try:    
+        self.__circles[circle_name] = Circle.Circle(circle_name,alters)#adds circle
+        #except KeyError:
+            #self.__circles[circle_name] = set()    
+            #self.__circles[circle_name].add(Circle.Circle(circle_name, alters))
+    
+    def add_connection_between_alters(self,alter1,alter2):
+        if alter1 in self.__social_network:#if alter1 in
+            self.__social_network[alter1].add(alter2)#add alter2
+        else:
+            alter1 = (alter2)#make equal
+        if alter2 in self.__social_network:#if alter2 in
+            self.__social_network[alter2].add(alter1)#add alter1
+        else:
+            alter2 = (alter1)#makes equal
+
+    def add_alter_node(self, alter):
+        if alter not in self.__social_network: #if alter not in social network
+            self.__social_network[alter] = set()#create sets
+        self.__social_network[alter].add(self.__ego)#add to set
+        self.__social_network[self.__ego].add(alter)#add to set
+        self.__alter_node_count += 1#counts
+        
+            
+
+    def __eq__(self,other):
+        '''True if all attributes are equal.'''
+        return (self.__ego == other.__ego)\
+            and (self.__social_network == other.__social_network) \
+            and (self.__alter_node_count == other.__alter_node_count) \
+            and (self.__circles == other.__circles) \
+            and (self.__ego_net_features == other.__ego_net_features)
+            
+    def __str__(self):
+        '''Returns a string representation for printing.'''
+        st = f"Ego: {self.__ego}\n"
+        st+= f"Social Network: {self.__social_network}\n"
+        st+= f"Circles: {self.__circles}"
+        return st
+
+    __repr__ = __str__
