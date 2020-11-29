@@ -1,0 +1,245 @@
+ ###########################################################
+
+    #  Computer Project #8 (I tried my best, display was impossible for me.)
+    
+    #import statements
+
+    #  Algorithm
+
+    #    created open_file function
+    
+    #       asks user for what file they would like to open
+
+    #       if user enters unknown file, prompts user for second
+
+    #    created get_athlete_stats function
+    
+    #       defining dictionary and tuple
+
+    #       try to get each piece of data
+    
+    #       except continue
+    
+    #       loop to append data to dictionary
+    
+    #       return
+
+    #   created get_country_stats function
+
+    #       define tuple and dictionarys
+    
+    #       reader
+    
+    #       tuple with outputs
+    
+    #       loop to append data
+    
+    #       return output in correct order
+
+    #   created display_best_athletes_per_sport function
+    
+    #       created dictionary
+    
+    #       pulling data
+    
+    #   created display_top_countries_by_sport function
+    
+    #   created prepare_plot function
+    
+    #       define dictionary and variables
+    
+    #       for loop to pull data
+    
+    #           if year isnt in year list then append
+    
+    #           if the medal equals the desired output count and append
+    
+    #       return output in correct order
+    
+    #       asks user if they would like to plot
+    
+    #       if yes then it will go to plot function
+
+    ###########################################################
+from operator import itemgetter # optional, if you use itemgetter when sorting
+import matplotlib.pyplot as plt
+import csv
+def open_file():
+    file_Name = input("Input a file name: ")#prompt for user
+    while True:#while true
+        try:
+            file_Name = open(file_Name,'r') #readable file
+            break 
+        except FileNotFoundError: #if error then it will output and restart
+            print("File not found.")
+            file_Name = input("Input a file name: ")
+    return file_Name
+
+
+def get_athlete_stats(fp):    
+    tup = ()#creates tuple
+    dictionary = {}#creates dictionary
+    reader = csv.reader(fp)   #creates reader
+    
+    for line_list in reader:#if line matches designated output, append to the tuple
+        try:
+            name = line_list[1]#finds name in csv
+            gender = line_list[2]#finds gender in csv
+            age = int(line_list[3])#finds age in csv
+            height = int(line_list[4])#finds height in csv
+            weight = int(line_list[5])#finds weight in csv
+            country_code = line_list[7]#finds country code in csv
+            tup = (gender, age, height, weight, country_code)#creates tuples to append the variables
+        except:
+               continue
+        if name in dictionary:#if the name is in the dictionary
+            dictionary[name].append(tup)#append it to the tuple
+        else:
+           dictionary[name] = [tup]#if not, check
+    #print(dictionary)
+    return dictionary#return dictionary
+
+
+
+def get_country_stats(fp, Athlete): 
+    tup = ()#define tuple
+    dictionary = {}#define dictionary
+   # diction = {Athlete}
+    reader = csv.reader(fp)#create reader
+    for line_list in reader:#if line matches designated output, append to the tuple
+        try:
+            name = line_list[1] # athlete’s name from csv
+            team_name = line_list[6]#team name from csv
+            country_code = line_list[7]#country code from csv
+            year = int(line_list[9])#year from csv
+            sport = line_list[12].lower()#sport from csv
+            event = line_list[13].lower()#event from csv
+            medal = line_list[14].lower()#medal from csv
+            tup = (name, team_name, year, sport, event, medal)#append variables to medals
+        except:
+               continue#if none match, continue
+        if name in Athlete:#if name is in the output
+            if country_code in dictionary:#if country code is in the dictionary
+                #tup = (name, team_name, year, sport, event, medal)
+                dictionary[country_code].append(tup)#append to the tuple
+            else:
+                dictionary[country_code] = [tup]#if not check
+    print(dictionary)
+    return dictionary#return dictionary
+
+def display_best_athletes_per_sport(Athlete, Country, Sports):
+    
+    sport_dic = dict()#define dictionary
+    athlete_dic = dict()#define dictionary
+    #print(sport_dic)
+    for sport in Sports:#for the sport name in Sports
+        sport_dic[sport] = 0#define key as 0
+    name_dictionary = dict()#define dictionary
+    for values in Country.values():#looking for value
+        for n in values:#for n in value
+            name = n[1]#checking 1 spot for name
+            sport = n[3]#checking 3 spot for sport
+            if name in name_dic:#if it is not in the dictionary then its 1
+                name_dic[name] += 1
+            else:
+                name_dic[name] = 1
+    
+
+
+
+def display_top_countries_by_sport(Country, answer):
+
+    '''
+
+        Place Docstring here!
+
+    '''
+
+       
+
+pass
+
+def prepare_plot(country_lst):
+    diction = dict()#define dictionary
+   # year = 
+    gold = 0#define variable
+    silver = 0#define variable
+    bronze = 0#define variable
+    year_lst = []
+    gold_lst = [0,0,0]
+    silver_lst = [0,0,0]
+    bronze_lst = [0,0,0]
+    diction[1948]=0
+    diction[1952]=1
+    diction[2014]=2
+   
+    
+    for value in country_lst:#if the value is in the country list
+        medal=value[5]#spot for medals
+        year = value[2]#spot for year
+      
+        if year not in year_lst:#if it isnt in the year list then append
+            year_lst.append(year)
+            year_lst.sort()
+       # print(year_lst)
+        if medal == 'gold':#if gold then add one
+            gold += 1
+            gold_lst[diction[year]]+=1#add one
+        if medal == 'silver':#if silver then add one
+            silver +=1
+            silver_lst[diction[year]]+=1#add one
+        if medal == 'bronze':#if bronze then add one
+            bronze += 1
+            bronze_lst[diction[year]]+=1#add one
+    return year_lst, gold_lst, silver_lst, bronze_lst#return in a list
+   # print(year_lst,gold_lst,silver_lst,bronze_lst)
+    
+def plot_country_medals_per_year(year, gold, silver, bronze, country):
+
+    plt.plot(year, gold, 'yo')
+    plt.plot(year, silver, 'bs')
+    plt.plot(year, bronze, 'ro')
+    plt.title("Number of Medals Over the Years For {}".format(country))
+    plt.xlabel('Years'), plt.ylabel('Number of medals')
+    plt.legend(['gold','silver','bronze'])
+    #plt.show()
+    country=country.replace(" ","_")
+    plt.savefig(f"{country}_plot.png")
+    plt.clf()
+    
+def main():
+
+    '''
+
+        Place Docstring here!
+
+    '''
+    
+   # file_name = input()
+    opener = open_file()#open
+    athlete = get_athlete_stats(opener)#define athlete
+   # opener.close()
+   # opener = open_file(file_name)
+    country = get_country_stats(opener, athlete)#define country
+    opener.seek(0)#to check
+
+    for n in country.keys():#attempt to open the prepare_plot
+        print(country[n])
+        a,b,c,d  = prepare_plot(country[n])
+        print(n,a,b,c,d)
+        
+        
+    display_ath = display_best_athletes_per_sport(athlete,country,)#displaying athlete
+    #country_lst = 
+    #prepare_plot(opener[country])
+    #print(opener)
+   # pass
+   #prepare_plot
+  # sports = set()
+  # while 
+
+###### Main Code ######
+
+if __name__ == "__main__":
+
+    main()
