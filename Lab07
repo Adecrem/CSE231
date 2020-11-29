@@ -1,0 +1,92 @@
+import csv
+from operator import itemgetter
+
+INDUSTRIES = ['Agriculture', 'Business services', 'Construction', 'Leisure/hospitality', 'Manufacturing']
+
+def read_file(fp):
+    reader = csv.reader(fp)
+    L = []
+    L2 = []
+    for line in reader:
+        lst = [line[0], line[1], line[2], line[9]]
+        L.append(line)
+        L2.append(lst)
+    return L[4:5]+L[6:57]
+    pass
+    
+    L = []
+    reader = csv.reader(fp)
+    
+def get_totals(L):
+    total_pop = 0
+    uslist = L[0]
+    us_pop = uslist[1].replace(',','')
+    L = L[1:]
+    for line in L:
+        total_pop += int(line[1].replace(',','').replace('<',''))
+    return int(us_pop),int(total_pop)
+    pass
+
+def get_industry_counts(L):
+    new_L = []
+    for line in L:
+        if '-' not in line:
+            new_L.append(line[9])
+    new_L = new_L[1:]
+    const_c = 0
+    manu_c = 0
+    biz_c = 0
+    leis_c = 0
+    agri_c = 0
+    for i in new_L:
+        if str(i) == 'Construction':
+            const_c += 1
+        elif str(i) == 'Manufacturing':
+            manu_c += 1
+        elif str(i) == 'Business services':
+            biz_c += 1
+        elif str(i) == 'Leisure/hospitality':
+            leis_c += 1
+        elif str(i) == 'Agriculture':
+            agri_c += 1
+    lst = [['Construction', const_c],['Manufacturing', manu_c],['Leisure/hospitality', leis_c],['Business services', biz_c],['Agriculture', agri_c]]
+    key = itemgetter(1)
+    return lst
+    pass
+
+def get_largest_states(L):
+    uslist2 = L[0]
+    uspc = uslist2[2]
+    L = L[2:]
+    statelist = []
+    for line in L:
+        state = line[0]
+        percent = line[2]
+        if percent > uspc:
+            statelist.append(state)
+    return statelist
+    pass
+
+def main():    
+    fp = open("immigration.csv")
+    L = read_file(fp)
+    
+    us_pop,total_pop = get_totals(L)
+    print("\nData on Illegal Immigration\n")
+    print("Summative:", us_pop)
+    print("Total    :", total_pop)
+    
+    states = get_largest_states(L)
+    print("\nStates with large immigrant populations")
+    for state in states:
+        state = state.replace('\n',' ')
+        print(state)        
+    
+    counters = get_industry_counts(L)
+    print("\nIndustries with largest immigrant populations by state")
+    print("{:24s} {:10s}".format("industry","count"))
+    for tup in counters:
+        print("{:24s} {:2d}".format(tup[0],tup[1]))
+        
+if __name__ == "__main__":
+    main()
