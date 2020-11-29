@@ -1,0 +1,548 @@
+###########################################################
+
+    #  Computer Project #7
+
+    #Defining Column and Row to their amounts
+
+    #  Algorithm
+
+    #    created initialize function
+    
+    #       loop that creates board with 0's in the boxes
+
+    #       return board
+
+    #    created choose_color function
+    
+    #       define color as blank
+
+    #       inputs for user to enter color
+    
+    #       if color is black/white return black/white
+    
+    #       if neither reprompt the user to enter a color
+    
+    #       return color
+
+    #   given board_display function
+    
+    #       prints board and changes 0 to ' '
+
+    #   created drop_disc function
+    
+    #       if column is out of range return none
+    
+    #       if the column is full return full
+    
+    #       for every row entered, must subtract 1 to index
+    
+    #       if you drop in a column with one in it, it will stack
+    
+    #   created check_disc function
+    
+    #       edit row and column for indexing
+    
+    #       return false if the box is 0
+    
+    #       if the column or row is out of range return none
+    
+    #       using while loops that break if it doesnt confirm true
+    
+    #       if statements didnt work for me
+    
+    #       Horizontal test
+    
+    #           Initialize in the top right
+    
+    #           check that box and index to the next only adjusting column
+    
+    #           goes through every box and checks
+    
+    #           if there is no zero in 4 boxes in a row return True
+    
+    #       Vertical test
+    
+    #           initialize in top left
+    
+    #           check the box and index down only adjusting row
+    
+    #           checks every box
+    
+    #           if 4 in a row not zero returns True
+    
+    #       horizontal positive test
+    
+    #           given range to test if 4 horizontal to the right(positive slope)
+    
+    #           adjustments made to both row and column
+    
+    #           adding one and subtracting one to check that box
+    
+    #           if there is a match of four in a row, returns True
+    
+    #       vertical negatve test
+    
+    #           given range to test if 4 horizontal to the left(negative slope)
+    
+    #           add one and subtract one to column and row and check if match
+    
+    #           if match return true
+    
+    #   created is_game_over function
+    
+    #       function tests for winner
+    
+    #       if the top row contains no 0's the row is full
+    
+    #       if the check_disc function is true it establishes winner
+        
+    #   created main function
+    
+    #       2 different if statements for black and white
+    
+    #       if black and white contain the same thing so only stated once
+    
+    #       if user inputs black/white
+    
+    #           initialize board and state what color you are
+    
+    #           output prompt for column number
+    
+    #           if user inputs string then ValueError
+    
+    #           if user inputs exit, exits whole program
+    
+    #           if user inputs pass, forfeits
+    
+    #           if the column is out of range it will reprompt
+    
+    #           loops between black and white
+    
+    #           once found true then it will print a winner
+    
+    #           if column/board full, it will print
+    
+    #   continue_game 
+    
+    #       if continue game is yes then it will run again
+    
+    #       if continue game no it will print final message
+
+    ###########################################################
+pieces = {'black':'b', 'white':'w'}
+COLUMN = 7
+ROW = 6
+
+def initialize():# builds board with 0's in place
+    board = [[0 for x in range(COLUMN)] for y in range(ROW)]
+    return board# returns board
+    #print(board)
+
+def choose_color():#prompts user for color
+    color = ''#defines color as 0
+    
+    color = input("Pick a color: ")#prompt to pick a color
+    if color.lower() == 'black':#if color is black then return
+        return 'black'
+        #print("You are 'black' your opponent is 'white'.")
+    elif color.lower() == 'white':#if color is white then return
+        return 'white'
+       # print("You are 'white' your opponent is 'black'.")
+    else:
+        while color.lower() != 'white' and color.lower() != 'black':#if color is anything besides black or white then reprompt
+            print("Wrong color; enter only 'black' or 'white', try again.")
+            color = input("Pick a color: ")
+    return(color.lower())#return color
+    
+def board_display(board):#display board given
+    
+    print("Current board:")
+    C = COLUMN
+    R = ROW
+    hline = '\n' + (' ' * 2) + ('+---' * C) + '+' + '\n'
+    numline = ' '.join([(' ' + str(i) + ' ') \
+                        for i in range(1, C + 1)])
+    str_ = (' ' * 3) + numline + hline
+    for r in range(0, R):
+        str_ += str(r+1) + ' |'
+        for c in range(0, C):
+            str_ += ' ' + \
+                (str(board[r][c]) \
+                     if board[r][c] is not 0 else ' ') + ' |'
+        str_ += hline
+    print (str_)
+
+def drop_disc(board, column, color): #drop disc function
+
+    if column > 7 or column < 1:#column out of range
+        print('1 <= column <= 7. Please try again.')#prompt for user
+        return None #if out of range return none
+    
+    column = column-1
+    if board[0][column] != 0:
+        return 'full' #if top of row doesnt = 0 then its full
+    
+    for y in range(ROW-1): #used dropping in the correct row
+        if board[ROW-1][column] == 0:
+            board[ROW-1][column] = color[0]
+            return ROW#return row
+            
+        if board[y+1][column] != 0:#if dropped on existing column, stack
+            board[y][column] = color[0]
+            return y+1#return row+1
+       
+
+
+
+def check_disc(board, row, column): 
+    row = row-1 #These are changing to index
+    column = column-1 #indexing
+    if board[row][column] == 0: #if box contains 0 return false
+        return False
+    if column > 6 or column < 0 or row > 5 or row < 0: #if column or row out of range return none
+        return None
+    
+    #Horizontal test
+    while column in range(4):#top row first 4 box check
+        if board[row][column] == board[row][column+1]== board[row][column+2] == board[row][column+3]:#check every box 0-4
+            return True #return True
+        else:
+            break
+    while column in range(1,5):#checks every box 1-4
+        if board[row][column+1] == board[row][column+2]== board[row][column-1] == board[row][column]:
+            return True #return true
+        else:
+            break
+    while column in range(2,6): #checks every box 2-5
+        if board[row][column] == board[row][column+1]== board[row][column-1] == board[row][column-2]:
+            return True #return true
+        else:
+            break
+    while column in range(3,7): #check every box 3-6
+        if board[row][column] == board[row][column-1]== board[row][column-2] == board[row][column-3]:
+            return True #return true
+        else:
+            break
+        
+        
+        #vertical
+    while row in range(3):#starting in the top left
+        if board[row][column] == board[row+1][column]== board[row+2][column] == board[row+3][column]:#checks every box 0-2
+            return True #return true
+        else:
+            break
+    while row in range(1,4):#checks every box 1-3
+        if board[row][column] == board[row-1][column]== board[row+1][column] == board[row+2][column]:
+            return True #return true
+        else:
+            break
+    while row in range(2,5):#checks every box 2-4
+        if board[row][column] == board[row+1][column]== board[row-1][column] == board[row-2][column]:
+            return True #return true
+        else:
+            break
+    while row in range(3,6): #checks every box 3-5
+        if board[row][column] == board[row-1][column]== board[row-2][column] == board[row-3][column]:
+            return True #return true
+        else:
+            break
+        
+        
+    #Diagonal positive
+    while column in range(4):#creates a box to check in the first 3 columns
+        if row in range(3,6):#creates box to check in the bottom 3 rows creating a box of 4 to check
+            if board[row][column] == board[row-1][column+1]== board[row-2][column+2] == board[row-3][column+3]:#checks first box in a diagonal
+                return True #return true
+            else:
+                break
+        else:
+            break
+
+    while column in range(1,5):#checks next box in diagonal line sloping up
+        if row in range(2,5):
+            if board[row][column] == board[row+1][column-1] == board[row-1][column+1]== board[row-2][column+2]:#checks second box
+                return True #return True
+            else:
+                break
+        else:
+            break
+    while column in range(2,6):#checks next box in diagonal line sloping up
+        if row in range(1,4):
+            if board[row][column] == board[row+1][column-1] == board[row+2][column-2]== board[row-1][column+1]:#checks third box
+                return True #return True
+            else:
+                break
+        else:
+            break
+    while column in range(3,7):#checks next box in diagnoal line sloping up
+        if row in range(3):
+            if board[row][column] == board[row+1][column-1]== board[row+2][column-2]== board[row+3][column-3]:
+                return True #return True
+            else:
+                break
+        else:
+            break
+        
+        
+    #Diagonal negative
+    while column in range(4):#Creates box starting in the top left corner
+        if row in range(3):
+            if board[row][column] == board[row+1][column+1]==board[row+2][column+2]== board[row+3][column+3]:#checks top left box
+                return True#return true
+            else:
+                break
+        else:
+            break
+    while column in range(1,5):#checks next box sloping down
+        if row in range(1,4):
+            if board[row][column]== board[row-1][column-1]==board[row+1][column+1]== board[row+2][column+2]:#checks next box
+                return True #return True
+            else:
+                break
+        else:
+            break
+    while column in range(2,6):#checks next box sloping dow
+        if row in range(2,5):
+            if board[row][column]== board[row-1][column-1]==board[row-2][column-2]==board[row+1][column+1]:#checks next box
+                return True #return True
+            else:
+                break
+        else:
+            break
+    while column in range(3,7):#checks next box sloping downward
+        if row in range(3,6):
+            if board[row][column]==board[row-1][column-1]==board[row-2][column-2]==board[row-3][column-3]:#checks next box
+                return True #return True
+            else:
+                break
+        else:
+            break
+                
+    return False#return false otherwise
+    
+    
+def is_game_over(board):
+                
+    if board[0][0] != 0 and board[0][1] != 0 and board[0][2] != 0 and board[0][3] != 0 and board[0][4] != 0 and board[0][5] != 0 and board[0][6] != 0:
+        return 'draw' #if the top row doesnt contain 0's in every box then the whole grid is full
+    
+    for column in range(7):#check whole column
+        for row in range(6):#check whole row
+            checker = check_disc(board,row,column)#call in check_disc
+            if checker == True:#if check disc is True
+                if board[row][column] == 'w':#white wins
+                    return 'white'#return white
+                if board[row][column]== 'b':#black wins
+                    return 'black'#return black
+            else:
+                continue#if no winner continue
+                   
+def main():
+    '''
+    REPLACE WITH DOCSTRING
+    '''
+    banner = """
+       ____ ___  _   _ _   _ _____ ____ _____ _  _   
+      / ___/ _ \| \ | | \ | | ____/ ___|_   _| || |  
+     | |  | | | |  \| |  \| |  _|| |     | | | || |_ 
+     | |__| |_| | |\  | |\  | |__| |___  | | |__   _|
+      \____\___/|_| \_|_| \_|_____\____| |_|    |_|  
+    """
+    intro = """
+    Connect Four is a two-player connection game in which the players first choose a color and \
+    then take turns dropping one colored disc from the top into a seven-column, six-row vertically suspended grid. \
+    The pieces fall straight down, occupying the lowest available space within the column. \
+    The objective of the game is to be the first to form a horizontal, vertical, or diagonal line of four of one's own discs. 
+    """
+    usage = """
+        Usage:
+            pass:   give up, admit defeat
+            exit:   exit the game
+            i:      drop a disk into column i
+    """
+    print(banner)
+    print(intro)
+    print(usage)
+     
+    continue_game = 'yes'  # can't use "continue" because it has a special meaning
+    while continue_game == 'yes':
+        player_color = choose_color()#call in color prompt
+        #board = initialize()
+
+
+        
+        if player_color == 'black':#if color is black
+            print("You are 'black' and your opponent is 'white'.")#print message stating which color
+            board = initialize()#initialize board
+            b = board_display(board)#display the board
+            while True: #while True
+              
+                your_turn = input("black's turn :> ")#print whose turn it is
+                if your_turn == 'pass':# if stated pass
+                    print("black gave up! white is the winner!! yay!!!")#forfeit
+                    break
+                if your_turn == 'exit':#if stated exit
+                    print("Thanks for playing! See you again soon!")#exit the game
+                    continue_game = 'no' #so it doesnt ask for another game
+                    break
+                else:
+                    try:
+                        column = int(your_turn)#turns your column into an int
+                    except ValueError:#if a string is entered
+                        print('Invalid option')#state invalid option
+                        print(usage)#show the usages of accepted strings
+                        continue
+                    while column < 1 or column > 7:#if column is out of range
+                        if your_turn == 'exit':#exit
+                            print("Thanks for playing! See you again soon!")#exit prompt
+                            continue_game = 'no'#doesnt ask for another game
+                            break
+                        if your_turn == 'pass':#pass function
+                            print("black gave up! white is the winner!! yay!!!")#pass prompt
+                            break
+                        print('Invalid column: 1 <= column <= 7. Please try again.')#out of range
+                        your_turn = input("black's turn :> ")#states players turn
+                        if your_turn == 'pass':#pass function
+                            print("black gave up! white is the winner!! yay!!!")#pass prompt
+                            #break
+                        break
+                        column=int(your_turn)#establishes column as int
+                        #print(usage)
+
+                        continue
+                    
+                    else:
+                      
+                        dropper = drop_disc(board,column,'b')#drop function called
+                        board_display(board)#display board after dropped
+                        checker = check_disc(board,dropper,column)#check disc called
+                        winner = is_game_over(board)#game over called
+                        if checker == True or winner == 'black':#if black is winner
+                            print('black wins!')#print black wins
+                            break
+                        if winner == 'draw':#if draw print draw
+                            print('draw')
+                            break
+                    if your_turn == 'pass':#pass
+                        break
+                    your_turn2 = input("white's turn :> ")#white's turn
+                    if your_turn2 == 'pass':#if turn is pass for white
+                        print("white gave up! black is the winner!! yay!!!")#pass prompt
+                        break
+                    if your_turn2 == 'exit':#if turn is exit for white
+                        print("Thanks for playing! See you again soon!")#exit prompt
+                        break
+                    else:
+                        try:
+                            column2 = int(your_turn2)#establishes whites column as int
+                        except ValueError:#unaccepted string
+                            print('Invalid option')#valueerror prompt
+                            print(usage)#prints accepted strings
+                            continue
+                        while column2 < 1 or column2 > 7:#if column is out of range
+                            print('Invalid column: 1 <= column <= 7. Please try again.')#out of range prompt
+                            your_turn = input("white's turn :> ")#shows whos turn it is
+                            if your_turn2 == 'pass':#if turn is pass
+                                print("white gave up! black is the winner!! yay!!!")#pass prompt
+                                break
+                            column=int(your_turn)#establishes column as int
+                            #print(usage)
+                            continue
+                        else:     
+                            dropper2 = drop_disc(board,column2,'w')#drop called for white column
+                            board_display(board)#display board
+                            checker2 = check_disc(board,dropper2,column)#check called
+                            is_game_over(board)#is game over
+                            if checker2 == True:#if checker is true for white white wins
+                                print('white wins!')#winner prompt
+                                break
+                            if winner == 'draw':#if draw
+                                print('draw')#draw prompt
+                                break
+##############
+# IF player is white contains the exact same thing as black, use comments as needed
+##############
+            
+        if player_color == 'white':
+            print("You are 'white' and your opponent is 'black'.")
+            board = initialize()
+            b = board_display(board)
+            while True:
+                your_turn = input("white's turn :> ")
+                if your_turn == 'pass':
+                    print("white gave up! black is the winner!! yay!!!")
+                    break
+                else:
+                    try:
+                        column = int(your_turn)
+                    except ValueError:
+                        print('Invalid column: 1 <= column <= 7. Please try again.')
+                        print(usage)
+                        continue
+                    while column < 1 or column > 7:
+                        if your_turn == 'pass':
+                            print("black gave up! white is the winner!! yay!!!")
+                            break
+                        print('Invalid column: 1 <= column <= 7. Please try again.')
+                        your_turn = input("white's turn :> ")
+                        #print(usage)
+                        if your_turn == 'pass':
+                            print("white gave up! black is the winner!! yay!!!")
+                            break
+                        column=int(your_turn)
+                        print(usage)
+                        continue
+                    else:
+                        dropper = drop_disc(board,column,'w')
+                        board_display(board)
+                        checker = check_disc(board,dropper,column)
+                        winner = is_game_over(board)
+                        if checker == True or winner == 'white':
+                            print('white wins!')
+                            break
+                        if winner == 'draw':
+                            print('draw')
+                            break
+                    if your_turn == 'pass':
+                        break       
+                    your_turn2 = input("black's turn :> ")
+                    if your_turn2 == 'pass':
+                        print("black gave up! white is the winner!! yay!!!")
+                        break
+                    else:
+                        try:
+                            column2 = int(your_turn2)
+                        except ValueError:
+                            print('Invalid column: 1 <= column <= 7. Please try again.')
+                            print(usage)
+                            continue
+                        while column2 < 1 or column2 > 7:
+                            print('Invalid column: 1 <= column <= 7. Please try again.')
+                            your_turn = input("black's turn :> ")
+                            if your_turn2 == 'pass':
+                                print("black gave up! white is the winner!! yay!!!")
+                                break
+                            column=int(your_turn)
+                            print(usage)
+                            continue
+                        else:
+                            dropper2 = drop_disc(board,column2,'b')
+                            board_display(board)
+                            checker = check_disc(board,dropper2,column)
+                            is_game_over(board)
+                            if checker == True:
+                                print('black wins!')
+                                break
+                            if winner == 'draw':
+                                print('draw')
+                                break
+                            
+        if continue_game == 'no':#as stated used so no play again message is promped
+            break
+        continue_game = input("Would you like to play again? ").lower() #play again input
+    else:
+        print()
+        print("\nThanks for playing! See you again soon!")
+    
+if __name__ == "__main__":
+    main()
