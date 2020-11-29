@@ -1,0 +1,279 @@
+###########################################################
+
+    #  Computer Project #9
+
+    #import statements
+    #  Algorithm
+    #open_file(message)
+    #   if user enters space it will give default file
+    #   else it will test
+    #check_characters_function
+    #   checks letters in password
+    #   if characters are in password return
+    #password_entropy_calculator(password)
+    #   calls in check characters with different options
+    #   if the entropy returns true then add the number
+    #   runs through equation
+    #build_password_dictionary
+    #   checks for line in file
+    #   strips line of spaces
+    #   creates entropy, hash
+    #   rank adds
+    #   appends to dic
+    #cracking(fp,D_hash)
+    #   define counts and dic
+    #   for item in my file
+    #       strip of : and \n
+    #   if hash in hash_D
+    #   index
+    #   append
+    #   sort
+    #   return
+    #create_set(fp)
+    #   creates set
+    #   takes file pointer
+    #   strips of space
+    #   adds to set
+    #common_patterns()
+    #   creates set
+    #   splits words
+    #   checks words with dictionarys
+    #   sorts set
+    #   turns set to lst
+    #   append lst
+    #main()
+    #   prompt
+    #   if user enters number out of range
+    #   reprompt
+    #   if user enters 1
+    #       aks user for file
+    #       creates builder
+    #       creates cracker
+    #       formats
+    #   if user enters 2
+    #       asks for files
+    #       turns files to sets
+    #       format
+    #   if user enters 3
+    #       ask user for word
+    #       call entropy calculator 
+    #       run word through and output value
+    #   if user enters 4
+    #       stop
+    ###########################################################
+from math import log2
+from operator import itemgetter
+from hashlib import md5
+from string import ascii_lowercase, ascii_uppercase, digits, punctuation
+
+
+def open_file(message):
+    file_Name = input(message)#prompt for user
+    while True:#while true
+        if file_Name == '':
+            file_Name = open('pass.txt')
+            return file_Name
+        else:
+            try:
+                file_Name = open(file_Name,'r') #readable file
+                break 
+            except FileNotFoundError: #if error then it will output and restart
+                print('File not found. Try again.')
+                file_Name = input(message)
+    return file_Name
+            
+def check_characters(password, characters):
+    lst = []
+    for letter in password:
+        lst.append(letter)  #append word
+    for i in range(len(lst)):
+        if any(letter in password for letter in characters):#if any character is in word
+            return True#return True
+            break
+        else:
+            return False#return False
+            break
+    
+def password_entropy_calculator(password):
+    L = len(password)#creates length
+    N = 0.0#creates float for number
+    
+    is_uppercase = check_characters(password, ascii_uppercase)#uppercase check
+    is_lowercase = check_characters(password, ascii_lowercase)#lowercase check
+    is_digit = check_characters(password, digits)#digit check
+    is_special = check_characters(password, punctuation)#punctuation check
+    
+    if is_digit == True:
+        N += 10#add for digit
+        
+    if is_uppercase == True:
+        N += 26#add for uppercase
+
+    if is_lowercase == True:
+        N += 26#add for lowercase
+
+    if is_special == True:
+        N+= 32#add for special character
+        
+    entropy = L * log2(N)#entropy equation
+    return  round(entropy, 2)#return float rounded entropy
+    
+'''
+numbers -> 10
+lowercase -> 26
+uppercase -> 26
+special characters -> 32
+'''
+def build_password_dictionary(fp):
+    dic = {}#create dictionary
+    #tup = ()
+    rank = 0#sets rank
+    for line in fp:#for line in file
+        rank+=1#add rank
+        password = line.strip('\n')#strip line
+        entropy = password_entropy_calculator(password)#call entropy
+        hasher = md5(password.encode()).hexdigest()#call hash finder
+        tup = (password, rank, entropy)#create tuple
+        
+        dic[hasher] = tup#append
+        
+    return dic#return
+
+def cracking(fp,hash_D):
+    hashe = ()#create tuple
+    lst = []#create list
+    cracker_count = 0#set count
+    uncracker_count = 0#set count
+    for item in fp:#for item in file
+        hashe = item.strip('\n').split(':')#split and strip
+        hasher = hashe[0]#index
+        if hasher in hash_D:#if hash in dic
+            tup = ()#create tuple
+            password = hash_D[hasher][0]#index
+            entropy = hash_D[hasher][2]#index
+            #entropy = password_entropy_calculator(password)
+            tup = (hasher, password, entropy )#create tuple
+            lst.append(tup)#append 
+            cracker_count+=1#add if cracked
+        else:
+            uncracker_count+=1#add if not
+    #lst_sorted = lst.sort(key=lambda elem: itemgetter[1])
+    lst_sorted = sorted(lst, key = itemgetter(1))#sort list
+    tuper = (lst_sorted, cracker_count, uncracker_count)#create tuple from outputs
+    return tuper#return tuple
+        
+
+def create_set(fp):  
+    setter = set()#create set
+    for line in fp:#if word in file
+        word = line.strip('\n')#strip line
+        setter.add(word)#add word to set
+    return setter#return set
+
+def common_patterns(D,common,names,phrases):
+    newdict = {}#create dictionary
+    for each_word in D.values():#if word in values
+        #print(each_word)
+        password = each_word[0]#index
+        setter = set()#creat set
+        for word in common:# if word in common dic
+    
+            if word.lower() in password:
+                newword = word.lower()#lowercase
+                setter.add(newword)#add to set
+
+        for word in names:#if word in name dic
+    
+            if word.lower() in password:
+                newword = word.lower()#lowercase
+                setter.add(newword)#add to set
+    
+        for word in phrases:#if word in phrases dictionary
+    
+            if word.lower() in password:
+                newword = word.lower()#lowercase
+                setter.add(newword)#add to set
+        lst = list(setter)#turn set to list
+        sorted_lst = sorted(lst)#sort list
+        newdict[password]= sorted_lst#append
+    return newdict#return dictionary
+        
+            
+def main():
+    
+    BANNER = """
+       -Password Analysis-
+
+          ____
+         , =, ( _________
+         | ='  (VvvVvV--'
+         |____(
+
+
+    https://security.cse.msu.edu/
+    """
+
+    MENU = '''
+    [ 1 ] Crack MD5 password hashes
+    [ 2 ] Locate common patterns
+    [ 3 ] Calculate entropy of a password
+    [ 4 ] Exit
+
+    [ ? ] Enter choice: '''
+
+    print(BANNER)#print banner
+    #print(MENU)
+    options = input(MENU)#prompt
+    while True:#while true
+        if options != '1' and options != '2' and options != '3' and options != '4':#if not an option
+            print('Error. Try again.')#error and reprompt
+            
+        if options == '1':
+            fp = open_file('\nCommon passwords file [enter for default]: ')#prompt for file
+            hashing = open_file('Hashes file: \n')#prompt for hash dictionary
+            builder = build_password_dictionary(fp)#call builder
+            cracker = cracking(hashing, builder)#call cracking
+            #print(cracker)
+            print('Cracked Passwords: ')#print 
+            for each_tup in cracker[0]:#for each tuple in large tuple
+                print('[ + ] {:<12s} {:<34s} {:<14s} {:.2f}'.format('crack3d!',each_tup[0],each_tup[1],each_tup[2]))#format
+            print('[ i ] stats: cracked {:,d}; uncracked {:,d}'.format(cracker[1],cracker[-1]))#format
+            options = input(MENU)#reprompt
+            
+            
+        if options == '2':
+            fp = open_file('\nCommon passwords file [enter for default]: ')#ask for file
+            builder = build_password_dictionary(fp)#call builder
+            common = open_file("Common English Words file: ")#ask for word dictionary
+            common_set = create_set(common)#create set from it
+            names = open_file("First names file: ")#ask for name dictionary
+            names_set = create_set(names)#create set from it
+            phrases = open_file("Phrases file: \n")#ask for phrases dictionary
+            phrases_set = create_set(phrases)#create set from it
+            D_patterns = common_patterns(builder, common_set, names_set, phrases_set)#add all to tuple
+            print("{:20s} Patterns".format('Password'))#format
+            for k,v in D_patterns.items():
+                print("{:20s} [".format(k),end='')# print password
+                print(', '.join(v),end=']\n') # print comma separated list
+            options = input(MENU)
+                
+                
+        if options == '3':#if option is 3
+            password = input("Enter the password: ")#ask for password
+            entropy = password_entropy_calculator(password)#call entropy
+            print("The entropy of", password, 'is', entropy)#print
+            entropy = password_entropy_calculator(password)#set entropy
+            options = input(MENU)#reprompt
+            
+        if options == '4':#if exit
+            break#exit
+        options = input(MENU)#reprompt
+    
+    
+
+
+
+    #pass
+    
+if __name__ == '__main__':
+    main()
