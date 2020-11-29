@@ -1,0 +1,26 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jan 16 15:24:14 2019
+
+@author: adecr
+"""
+#Defines variables
+even_count = 0
+odd_count = 0
+even_sum = 0
+odd_sum = 0
+positive_int_count = 0
+#Calculations that output the previously defined variables
+while True:
+    num = int(input("Input an integer (0 terminates): "))
+    if num == 0:
+        break
+    if num < 1:
+        continue
+    if num % 2 == 0:
+        even_count += 1
+        even_sum += num
+    else:
+        odd_count += 1
+        odd_sum += num
+    positive_int_count += 1
