@@ -1,0 +1,124 @@
+   ###########################################################
+
+    #  Computer Project #2
+
+    #
+
+    #  Algorithm
+
+    #    prompt for numbers 1-3 all with various outputs
+
+    #    input number
+
+    #    4 different if statements with various outcomes
+    
+    #       program gives brief description
+
+    #       prompt user for number of circles/squares
+
+    #       prompt user for size of radius/size
+
+    #       if size is out of range program restarts
+
+    #       output through turtle of the project
+
+    ###########################################################
+import turtle, time, os, random
+#Inital statement hiding the turtle and setting speed.
+turtle.hideturtle()
+turtle.speed(100)
+#prompt for the user giving multiple options with various outputs.
+PROMPT = '''
+what do you want to draw:
+          
+	(0) to quit         
+	(1) circles         
+	(2) square spiral.
+    
+choice: '''
+#Calling initial variables
+choice_str = input(PROMPT)
+choice_int = int(choice_str)
+#assigning the variable that the user enters that returns different values
+i = int(choice_int)
+
+#by the user entering 0 it cancels the program
+while i == 0:
+    print("Invalid choice; try again.")
+    turtle.bye()
+    os.exit(1)
+
+#by the user entering anything besides 0,1,2 it will refresh
+while choice_int != 0 and choice_int != 1 and choice_int != 2:
+    print("Invalid choice. Try again.")
+    choice_int = int(input("Choice: "))
+
+#by the user entering 1 it will print circles
+if i == 1:
+    print("\nThis program draws concentric circles of many different colors.\n") #intro to program
+    circles_str = input("Enter the number of circles to draw: ")#user inputs the number of circles to draw
+    c = int(circles_str)
+    
+    if c < 1:
+        print("Number of circles must be positive; try again.")#if below 1 its invalid
+        circles_str = input("Enter the number of circles to draw: ")
+        c = int(circles_str)
+     
+    if c > 1:
+        radius_str = input("\nEnter the radius (>=50, <=200) of the largest circle: ")#prompt to submit a radius 
+        side = int(radius_str)
+        
+        if side not in range(50, 200):
+            print("The side length must be an integer between 50 and 200; try again.")#Invalid value outside of 50 to 250
+            radius_str = input("\nEnter the radius (>=50, <=200) of the largest circle: ")#question reprinted
+            side = int(radius_str)
+            
+        if side in range(50, 200):#if radius is inside range
+            for t in range(c,0,-1):
+                turtle.begin_fill()#starts fill
+                turtle.color(random.random(), random.random(), random.random())#picks random colors
+                turtle.circle(side * t / c)#equation for concentric circles
+                turtle.end_fill()
+                turtle.left(90)
+                turtle.forward(side / c)
+                turtle.right(90)
+                
+                
+                
+elif i == 2:
+    print("\nThis program draws squares of many colors.\n")#description of program
+    squares_str = input("Enter the number of squares to draw: ")#prompt user to enter int
+    s = int(squares_str)
+    
+    if s < 1:    
+        print("Number of squares must be positive; try again.")#if int is below 4 this outputs
+        squares_str = input("Enter the number of squares to draw: ")#questions reoutputs
+        s = int(squares_str)
+    if s > 1:
+        sides_str = input("\nEnter the side length (>=50, <=200) of the largest square: ")#prompts user to enter side length
+        length = int(sides_str)
+        
+        if length not in range (50, 200):
+            print("The side length must be an integer between 50 and 200; try again.")#if side length is outside range
+            sides_str = input("Enter the side length (>=50, <=200) of the largest square: ")
+            length = int(sides_str)
+            
+        if length in range (50, 200):#if all prompted ints are in range
+            for y in range(s,0,-1):
+                turtle.fillcolor(random.random(),random.random(),random.random())
+                turtle.begin_fill()
+                turtle.forward(length)
+                turtle.right(90)
+                turtle.forward(length)
+                turtle.right(90)
+                turtle.forward(length)
+                turtle.right(90)
+                turtle.forward(length)
+                turtle.end_fill()
+                turtle.right(90+(360/s))#lines above construct a square and loop it
+
+time.sleep(15)        
+os._exit(1)# putting the turtle to sleep 
+
+
+
