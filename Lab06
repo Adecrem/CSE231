@@ -1,0 +1,42 @@
+#opens scores.txt
+dta = open("scores.txt")
+counter = 0
+
+student_List = []
+total = [0,0,0,0]
+
+print("{:20s}{:>6s}{:>6s}{:>6s}{:>6s}{:>10s}".format("Name", "Exam1", "Exam2", "Exam3", "Exam4", "Mean"))
+
+#first for statement turning statements to ints
+for line in dta:
+    counter += 1
+
+    line = line.strip("\n").strip()
+    line = line.split()
+
+    name = line[0] + " " + line[1]
+    exam1 = int(line[2])
+    exam2 = int(line[3])
+    exam3 = int(line[4])
+    exam4 = int(line[5])
+    average_Score = (exam1+exam2+exam3+exam4)/4
+    average_Score = round(average_Score,2)
+
+    total[0] += exam1
+    total[1] += exam2
+    total[2] += exam3
+    total[3] += exam4
+
+    tuple = (name,exam1,exam2,exam3,exam4,average_Score)
+    student_List.append(tuple)
+
+student_list_sorted = sorted(student_List)
+
+for data in student_list_sorted:
+    print("{:20s}{:6d}{:6d}{:6d}{:6d}{:10.2f}".format(data[0], data[1], data[2], data[3], data[4], data[5]))
+
+mean_out = [total[0]/counter,total[1]/counter,total[2]/counter,total[3]/counter]
+
+print("{:20s}{:6.1f}{:6.1f}{:6.1f}{:6.1f}".format("Exam Mean",mean_out[0], mean_out[1], mean_out[2], mean_out[3]))
+
+dta.close()
