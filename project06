@@ -1,0 +1,158 @@
+####
+# Place Source Header here!
+####
+
+from operator import itemgetter
+import csv
+import pylab as py
+
+def open_file():
+    
+    fp = input("Please enter a valid filename: ")
+    while True:
+        try:
+            fp = open(fp,'r') #readable file
+            break 
+        except FileNotFoundError: #if error then it will output and restart
+            print("Error opening the file. ")
+            fp = input("Please enter a valid filename: ")
+    return fp
+    pass
+
+def read_journal_file(fp):
+    tpls_lst = []
+    reader = csv.reader(fp)
+    for line_list in reader:
+        lst = []    
+        name = line_list[0]
+        name = name[0:30]    
+        lst.append(name)
+        try:
+            total_cites = int(line_list[1].replace(',',''))
+            total_cites_int = total_cites
+        except ValueError:
+            continue
+        lst.append(total_cites_int)
+        impact_factor = line_list[2]
+        try:
+            impact_factor_flt = impact_factor.replace(",","")
+            impact_factor_flt = float(impact_factor)
+            
+            lst.append(impact_factor_flt)
+        except ValueError:
+            continue
+            pass
+        lst_tuple = tuple(lst)    
+        tpls_lst.append(lst_tuple)
+    tpls_lst = sorted(tpls_lst, key=itemgetter(2), reverse = True)
+    print (tpls_lst)
+    return tpls_lst
+
+def read_category_file(fp):
+    result = []
+    tpls_lst = []
+    reader = csv.reader(fp)
+    header1 = next(reader,None)
+    header2 = next(reader,None)
+    for line_list in reader:
+        lst = [] 
+        name = line_list[0]
+        name = name[0:30]
+        lst.append(name)      
+        journals_num = line_list[2]
+        total_cites = line_list[3]
+        num = line_list[2]
+        num = num.replace(",","")
+        num2 = line_list[3]
+        num2 = num2.replace(",","")
+        average = float(num2)/float(num)
+        
+        try:
+            journals_num2 = journals_num.replace(",","")
+            journals_num2 = int(journals_num)
+            lst.append(journals_num2)
+            total_cites = int(total_cites.replace(",",""))
+            lst.append(total_cites)
+            lst.append(average)
+        except ValueError:
+            continue
+            pass
+        temp_tuple = tuple(lst)    
+        tpls_lst.append(temp_tuple)
+    tpls_lst = sorted(tpls_lst, key=lambda tup: tup[0], reverse=False)
+    print (tpls_lst)
+    return tpls_lst
+    
+def display_table(data):
+    print("{:^85s}".format("Citation Data of the Top 20 Categories"))
+    print("{:30s}{:>12s}{:>18s}{:>25s}".format('Category','Journals','Total Citations','Citation per Journal'))
+    total = 0
+    total2 = 0 
+    total3 = 0
+    for line_list in data[:20]:
+        num = line_list[2]
+        num2 = line_list[3]
+        average = float(num)/float(num2)
+        print("{:30s}{:>12d}{:>18d}{:>25f}".format(line_list[0][:30],int(line_list[2]),int(line_list[3]),average))
+        
+        total+= line_list[2]
+        total2 += line_list[3]
+        total3 += average
+    print("-"*85)
+    print("{:30s}{:>12f}{:>18f}{:>25f}".format("TOTAL", total,total2,total3))
+    
+def sort_data(data, column):
+    
+    
+    
+    pass
+
+def prepare_plot_data(data):
+    '''
+        Write docstring here!
+            
+    '''
+    
+    pass
+
+def plot_data(name,impact_factor):
+    '''
+        Plots the bar chart of the Journal Impact Factor
+        
+        Input:
+            data (list) -> List of journals and their impact factor
+            
+        Returns:
+            None
+    '''
+    
+    
+    py.barh(name,impact_factor)
+
+    py.title("Journal Impact Factor")
+    py.xlabel('Impact Factor')
+    py.ylabel('Journal Name')
+    
+    # To pass the Mimir plot test you must uncomment the 'savefig' line and comment out the 'show' line
+    # py.savefig("plot.png")
+    py.show()
+    
+
+def main():
+    '''
+    fp = open_file()
+    read_cat = read_category_file(fp)
+    fp = open_file
+    #read_journal = read_journal_file(fp)
+    display_table(read_cat)
+    read_journal_file(fp) = open_file()
+    read_category_file(fp) = open_file()
+    display_table()
+    
+    '''
+    '''
+    fp = open_file(fp)
+    L = read_journal_file(fp)
+    '''
+if __name__ == "__main__":
+    main()
