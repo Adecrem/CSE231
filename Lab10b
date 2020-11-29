@@ -1,0 +1,85 @@
+import cards
+###I was unable to do Test 2 due to spacing, I tried many different ways and none of them worked.
+# Create the deck of cards
+
+the_deck = cards.Deck()
+#the_deck.shuffle()
+
+# Deal cards to each player (alternating)
+
+player1_list=[]
+player2_list=[]
+for i in range( 5 ):
+    player1_list.append( the_deck.deal() )
+    player2_list.append( the_deck.deal() )
+
+def displayhand():
+   print("Hand1: ",player1_list)
+   print("Hand2: ",player2_list)
+   print()
+   
+def displayhand2():
+    print("hand1: ",player1_list)
+    print("hand2: ",player2_list)
+    
+
+def getcards(player1_list,player2_list):
+   player1_card = player1_list.pop(0)
+   player2_card = player2_list.pop(0)
+   return (player1_card, player2_card)
+
+
+def war(player1_card,player2_card):
+   if player1_card.rank() == player2_card.rank():
+       
+       print("Battle was 1: {}, 2: {}. Battle was a draw.".format(player1_card,player2_card))
+       player1_list.append(player1_card)
+       player2_list.append(player2_card)
+
+   elif player1_card.rank() == 1:
+       
+       print("Battle was 1: {}, 2: {}. Player 1 wins battle.".format(player1_card, player2_card))
+       player1_list.append(player1_card)
+       player1_list.append(player2_card)
+
+   elif player2_card.rank() == 1:
+       
+       print("Battle was 1: {}, 2: {}. Player 2 wins battle.".format(player1_card, player2_card))
+       player2_list.append(player2_card)
+       player2_list.append(player1_card)
+
+   elif player1_card.rank() > player2_card.rank():
+       
+       print("Battle was 1: {}, 2: {}. Player 1 wins battle.".format(player1_card, player2_card))
+       player1_list.append(player1_card)
+       player1_list.append(player2_card)
+
+   else:
+       
+       print("Battle was 1: {}, 2: {}. Player 2 wins battle.".format(player1_card, player2_card))
+       player2_list.append(player2_card)
+       player2_list.append(player1_card)
+  
+
+   displayhand2()
+  
+print("Starting Hands")  
+
+while(True):
+
+   displayhand()
+   card1,card2 = getcards(player1_list,player2_list)
+   war(card1,card2)          
+   k = input('Keep Going: (Nn) to stop:')
+   if k == 'n' or k == 'N':
+       break
+
+   if len(player1_list) == 0:
+       break
+   if len(player2_list) == 0:
+       break
+
+if len(player2_list) > len(player1_list):
+   print("Player 2 wins!!!")
+else:
+   print("Player 1 wins!!!")
