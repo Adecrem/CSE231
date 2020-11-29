@@ -1,0 +1,158 @@
+   ###########################################################
+
+    #  Computer Project #5
+
+    #import statements
+
+    #  Algorithm
+
+    #    created open_file function
+    
+    #       asks user for what file they would like to open
+
+    #       if user enters unknown file, prompts user for second
+
+    #    created get_gender function
+    
+    #       split makes each word into its own value
+
+    #       checks if male or female and outputs based on that
+
+    #   created is_mike function
+
+    #       split makes each word into its own value
+    
+    #       if Michael or Mike it takes it into account
+
+    #   created is_party function
+    
+    #       split makes each word into its own value
+    
+    #       if D or R is stated it takes it into account
+    
+    #   created print_result function
+    
+    #       format of where to put data
+    
+    #   plot_data function given
+    
+    #   created main function
+    
+    #       adds if the input per person fits
+    
+    #       prints results to print_result function
+    
+    #       asks user if they would like to plot
+    
+    #       if yes then it will go to plot function
+
+    ###########################################################
+    
+#Retain these import statements which serve the plot function. 
+import matplotlib.pyplot as plt
+plt.rcdefaults()
+import numpy as np
+import matplotlib.pyplot as plt
+
+def open_file(): #function that requests a file from user
+    file_Name = input("Input a file name: ")
+    while True:
+        try:
+            file_Name = open(file_Name,'r') #readable file
+            break 
+        except FileNotFoundError: #if error then it will output and restart
+            print("File not found.")
+            file_Name = input("Input a file name: ")
+    return file_Name
+    pass
+
+
+def get_gender(data_line): #function that checks gender
+    data_Line = data_line.split()
+    if data_Line[-1] == "male": #if line states that person is male or female
+        return 'male'
+    else:
+        return 'female'
+    pass
+
+
+def is_mike(data_line): #function that checks if name is mike
+    data_Line = data_line.split()
+    if 'Michael' in data_Line or 'Mike' in data_Line:#boolean for yes or no
+        return True
+    else:
+        return False
+    pass
+
+
+def get_party(data_line):#function that checks for party
+    data_Line = data_line.split()
+    if data_Line[-2] == "D":#if Democrat
+        return "Democrat"
+    elif data_Line[-2] == "R":#if Republican
+        return "Republican"
+    return data_line
+    pass
+            
+
+def print_result(c_rm, c_rf, c_dm, c_df, c_m): #prints results on format 
+    print('{0:<10s}{1:>15s}{2:>15s}'.format('Party', 'Republican', 'Democrat'))
+    print('{0:<10s}{1:>15d}{2:>15d}'.format('Male', int(c_rm), int(c_dm)))
+    print('{0:<10s}{1:>15d}{2:>15d}'.format('Female', int(c_rf), int(c_df)))
+    print('{0:<10s}{1:>1d}'.format('Dudes named Mike: ', int(c_m)))
+
+def plot_data(c_rm, c_rf, c_dm, c_df, c_m):#plots data 
+    '''
+    Plot a figure with provided data. This function is completed and only for fun :)
+    Input: 
+    c_rm, c_rf, c_dm, c_df, c_m: integers indicate number of Repub_male, 
+    Repub_female, Demo_male, Demo_female and dudes named 'Mike'.
+    Return: No Return.
+    '''
+    ylabels = ("Dudes named Mike","Republican_Female", "Republican_Male", "Democratic_Female", "Democratic_Male")
+#    ylabels = ("Republican_Male", "Republican_Female", "Democratic_Male", "Democratic_Female", "Dudes named Mike")
+    ypos = np.arange(len(ylabels))
+    count = np.array([c_m, c_rf, c_rm, c_df, c_dm,])
+#    count = np.array([c_rm, c_rf, c_dm, c_df, c_m])
+    plt.barh(ypos, count, align = 'center', alpha = 0.4)
+    plt.yticks(ypos, ylabels)
+    plt.xlabel('Count')
+    plt.title("How many female representatives in congress this year?")
+    #plt.show()
+    plt.savefig("plot.png")
+
+
+def main():#main function that does the calculations
+    file_name = open_file()
+    c_rm = 0
+    c_rf = 0
+    c_dm = 0
+    c_df = 0
+    c_m = 0
+    #defining all variables
+    
+    for data_line in file_name: #for doing all calcuations and adding
+        if is_mike(data_line)==True:
+            c_m+=1
+        if get_gender(data_line)=="male" and get_party(data_line)=="Democrat":
+            c_dm+=1
+        if get_gender(data_line)=="male" and get_party(data_line)=="Republican":
+            c_rm+=1
+        if get_gender(data_line)=="female"and get_party(data_line)=="Democrat":
+            c_df+=1
+        if get_gender(data_line)=="female"and get_party(data_line)=="Republican":
+            c_rf+=1
+        #adds if input fits 
+    print_result(c_rm, c_rf, c_dm, c_df, c_m)
+    
+    
+    q_plot = input("Do you want to plot? ") #asks user if they would like to plot data
+    
+    if q_plot =="YES" or q_plot == "Yes" or q_plot == "yes": #if user inputs yes then
+        plot_data(c_rm, c_rf, c_dm, c_df, c_m)
+
+    file_name.close()#if not then file closes
+         
+
+if __name__ == '__main__':
+    main()
