@@ -1,0 +1,182 @@
+  ###########################################################
+
+    #  Computer Project #3
+
+    #
+
+    #  Algorithm
+
+    #    prompt for user to enter level
+
+    #    input a level
+
+    #    while loop assigning levels
+
+    #       for loop giving range for game
+
+    #       defining each variable and giving a function
+
+    #       prompt for an integer
+
+    #       various different outputs for different inputs
+
+    #    quit message giving points and total amount correct
+
+    ###########################################################
+import string, time, random
+from cse231_random import randint
+
+ALPHABET_EASY = string.ascii_letters 
+ALPHABET = string.ascii_letters + string.punctuation
+#Prompt giving user different options
+LEVEL_PROMPT = '''
+Please choose the difficulty level:
+    E(e) for Easy;
+    M(m) for Medium;
+    H(h) for Hard;
+    Hit "Enter" for Default;
+    Q(q) to quit;
+
+Level: '''
+
+#Inputing the prompt for user to input
+level = input(LEVEL_PROMPT)
+
+#Defining variables
+reward = 0
+game_count = 0
+reward_count = 0
+round_total = 0
+
+#Main while loop allowing each level
+while level != "Q" and level != "q":
+
+    if level == "E" or level == "e":
+        level = "E"
+    
+    elif level in string.whitespace: #Default level when user presses enter
+        level = "E"
+    
+    elif level == "M" or level == "m":
+        level = "M"
+    
+    elif level == "H" or level == "h":
+        level = "H"
+    else:
+        print("Difficulty level not recognized.")
+        level = input(LEVEL_PROMPT)
+        
+#Defining variables
+    game_val = 1
+    reward = 0
+#For loop that gives the Easy level a function
+    for typer in range(1, 11, 1):
+        print("Level [{}], game [{}]/[10]".format(level, game_val))
+        if level == "E":
+            l = len(ALPHABET_EASY)#Calls Easy Alphabet
+            random_str = ""
+            length = randint(3, 5)#Range for Easy level
+            for i in range (length):
+                index = randint(0,l-1)
+                random_str += ALPHABET_EASY[index]
+                
+            t = 10#Time allowed for easy level
+#Time variables to keep track of time             
+            print("\nEnter this string:", random_str)
+            t1 = time.time()
+            word = input()
+            t2 = time.time()
+#If function that allows allows errors with case sensitivity           
+            if word.lower().replace(" ","") == random_str.lower():
+                if (t2 - t1) < t:
+                    print("Good job! You spent {:4.1f} of {} seconds entering string [{}][{}]".format((t2 - t1), t, random_str, word))
+                    print("")
+                    reward += (len(random_str))#Adds reward
+                    game_val += 1#Adds game value
+                    
+                    
+                else:
+                    print("Oops! Too much time. Result of this game is{}/10".format(game_val - 1))
+                    print("Total time for this game: ", (t2-t1))
+                    break
+            else:
+                print("Incorrect. Result of this game is {}/10.".format(game_val-1))
+                print("Total time for this game:{:4.1f}".format(t2-t1))
+                break
+            
+        if level == "M":
+            l = len(ALPHABET)#Calls main alphabet
+            random_str = ""
+            length = randint(6, 10)#Length for medium level
+            for i in range (length):
+                index = randint(0,l-1)
+                random_str += ALPHABET[index]
+                
+            t = 9#Time for medium level
+#Time function            
+            print("\nEnter this string:", random_str)
+            t1 = time.time()
+            word = input()
+            t2 = time.time()
+            
+            if word == random_str:
+                if (t2 - t1) < t:
+                    print("Good job! You spent {:4.1f} of {} seconds entering string [{}][{}]".format((t2 - t1), t, random_str, word))
+                    print("")
+                    reward += 2*(len(random_str))
+                    game_val += 1
+                    
+                else:
+                    print("Oops! Too much time. Result of this game is{}/10".format(game_val - 1))
+                    print("Total time for this game: ", (t2-t1))
+                    break
+            else:
+                print("Incorrect. Result of this game is {}/10.".format(game_val-1))
+                print("Total time for this game:{:4.1f}".format(t2-t1))
+                break
+        
+        if level == "H":
+            l = len(ALPHABET)
+            random_str = ""
+            length = randint(11, 15)
+            for i in range (length):
+                index = randint(0,l-1)
+                random_str += ALPHABET[index]
+                
+            t = 8
+            
+            print("\nEnter this string:", random_str)
+            t1 = time.time()
+            word = input()
+            t2 = time.time()
+            
+            if word == random_str:
+                if (t2 - t1) < t:
+                    print("Good job! You spent {:4.1f} of {} seconds entering string [{}][{}]".format((t2 - t1), t, random_str, word))
+                    print("")
+                    reward += 3*(len(random_str))
+                    game_val += 1
+                    
+                else:
+                    print("Oops! Too much time. Result of this game is{}/10".format(game_val - 1))
+                    print("Total time for this game: ", (t2-t1))
+                    break
+            else:
+                print("Incorrect. Result of this game is {}/10.".format(game_val-1))
+                print("Total time for this game:{:4.1f}".format(t2-t1))
+                break
+    
+#If function for to output result of game and time    
+    if level == "E":
+        print("Result of this game is {}/10.".format(game_val - 1))
+        print("Total time for this game: {:4.1f}".format(t2-t1))
+#Final adding of counts        
+    game_count += game_val
+    reward_count += reward
+    round_total += 10
+    level = input(LEVEL_PROMPT)
+#Quit statement outputting the total and rewards
+print("Your final total: {:d}/{:<d}".format(game_count-1, round_total))
+print("Your total reward: {:d}".format(reward_count))  
+        
+            
