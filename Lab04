@@ -1,0 +1,69 @@
+
+#year = int(input("input a year: "))
+
+def leap_year(year):
+
+    return int(year) % 400 == 0 or (int(year) % 4 == 0 and int(year) % 100 != 0)
+
+#print(leap_year(year))
+
+
+#s = input("Input a String: ")
+#n = int(input("Input an Int: "))
+def rotate(s,n):
+    return s[-n:]+s[:-n]
+#print(rotate(s,n))
+
+
+#numInput = int(float(input("Enter in an Int or Float: ")))
+#numInput = str(numInput)
+evens = '2468'
+odds = '13579'
+
+evens = '2468'
+odds = '13579'
+
+def digit_count(numInput):
+
+    i = 0
+    string_c = str(numInput)
+    if string_c.find(".") != -1:
+        for ch in string_c:
+            if ch == ".":
+                break
+            else:
+                i += 1
+                number = string_c[0:i]
+    else:
+        number = string_c
+    even_count = 0
+    odd_count = 0
+    zero_count = 0
+    for digit in number:
+        if int(digit) % 2 == 0 and int(digit) !=0:
+            even_count += 1
+        elif int(digit) == 0:
+            zero_count += 1
+        else:
+            odd_count += 1
+    return even_count, odd_count, zero_count
+
+
+
+#userString = input("Enter a String to see if it's a Digit: ")
+
+def float_check(number):
+    integers = "0123456789"
+    decimal_count = 0
+    for i in str(number):
+        if i not in integers:
+            if i == ".": 
+                decimal_count += 1
+                # Do not leave the function until the decimal_count becomes greater than 1.
+                if decimal_count > 1:
+                    return False
+            else:
+                return False
+    return True
+
+#print(float_check(userString))
