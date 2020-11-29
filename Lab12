@@ -1,0 +1,56 @@
+import math
+class vector(object):
+    def __init__(self,x=0,y=0):
+        self.x=x
+        self.y=y
+        
+    def __str__(self):
+        return str(round(self.vector,2)) 
+    
+    def __repr__(self):
+        return repr(self.vector) 
+    
+    def __add__(self,vector):
+        vector = (int(self.x)+int(vector.x), int(self.y)+int(vector.y))
+        return vector
+    
+    def __sub__(self,vector):
+        return (int(self.x)-int(vector.x),int(self.y)-int(vector.y))
+    
+    def __mul__(self,vector):
+        return (self.x*vector.x,self.y*vector.y)
+    
+    def __rmul__(self,vector):
+        return self.__mul__(vector)
+    
+    def __eq__(self,vector):
+        if self.x == vector.x and self.y == vector.y:
+            return True
+        else:
+            return False
+        
+    def magnitude(self):
+        magnitude=math.hypot(self.x,self.y)
+        return magnitude
+    
+    def unit(self):
+
+        try:
+            magnitude = self.x*(1/self.x) and self.y*(1/self.y)
+            return magnitude*(1/magnitude)
+        except ZeroDivisionError:
+            print('Cannot convert zero vector to a unit vector')
+
+def main():
+    v1 = vector(4,3)
+    v2 = vector(6,7)
+    print('add',v1.__add__(v2))
+    print('sub',v2.__sub__(v1))
+    print('equal',v1.__eq__(v2))
+    print('multiply',v1.__mul__(v2))
+    print('magnitude 1',v1.magnitude())
+    print('magnitude 2',v2.magnitude())
+    print('unit 1:',v1.unit())
+    print('unit 2:',v2.unit())
+    
+main()
