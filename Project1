@@ -1,0 +1,38 @@
+###########################################################
+    # By Andrew Decrem
+    
+    #  Computer Project #1
+
+    #  Algorithm
+
+    #    prompt for an integer in rods
+
+    #    changing integer to float value
+
+    #    conversions from rods to various units shown in comments
+
+    #     output of conversions while stating their units
+
+    ###########################################################
+    
+    
+    
+
+num_str1 = input('Input rods: ')
+rods = float(num_str1)
+
+meters = rods*5.0292 #calculations for rods to meters
+furlongs = rods/40 #calculations for rods to furlongs
+miles = (5.0292*rods)/1609.34 #calculations for rods to miles
+feet = (5.0292*rods)/.3048 #calculations for rods to feet
+time= (miles/3.1)*(60) #calculations for minutes per rods
+
+#outputing each conversion while stating their units
+print('You input',rods,'rods.') 
+print()
+print('Conversions')
+print("Meters:",round(meters,3))
+print("Feet: ",feet)
+print("Miles:",round(miles,3))
+print("Furlongs:",furlongs)
+print("Minutes to walk",rods,"rods:",round(time,3))
