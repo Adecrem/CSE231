@@ -1,0 +1,141 @@
+    ###########################################################
+
+    #  Computer Project #4
+
+    #
+
+    #  Algorithm
+
+    #    prompt for user to enter flag
+
+    #    input a flag
+
+    #    defined each shape
+
+    #       defined each flag outputting
+
+    ###########################################################
+import turtle
+#hiding turtle and setting turtle speed
+turtle.hideturtle()
+turtle.speed(100)
+
+#prompt for user asking what flag they would like to see drawn
+FLAG_PROMPT = '''
+Please choose the flag you would like to draw:
+   TUN for the Tunisian flag
+   LBY for the Libyan flag
+   TUR for the Turkey flag
+   SGP for the Singaporean flag
+   All for all four (4) flags
+   Q to quit
+
+Flag: '''
+#main statement outputting flag based on user input
+'''
+choice_Flag = input(FLAG_PROMPT)
+choice_str = str(choice_Flag)
+        
+while choice_Flag != 'Q':
+    if choice_Flag = 'TUN' or 'tun':
+        tun_flag(0,0,240)
+        
+    elif choice_Flag == 'LBY' or choice_Flag == 'lby':
+        lby_flag(0,0,240)
+        
+    elif choice_Flag == 'TUR' or choice_Flag == 'tur':
+        tur_flag(0,0,240)
+        
+    elif choice_Flag == 'SGP' or choice_Flag == 'sgp':
+        sgp_flag(0,0,240)
+      '''  
+        
+#draws a circle        
+def circle(x, y, radius, color):
+    turtle.penup()
+    turtle.home()
+    turtle.goto(x,y-radius)
+    turtle.pendown()
+    turtle.begin_fill() 
+    turtle.circle(radius)
+    turtle.color(color)
+    turtle.end_fill()
+#draws a cresent or half moon
+def crescent(x1, y1, x2, y2, r1, r2, c1, c2):
+    turtle.penup()
+    turtle.goto(x1,y1)
+    turtle.begin_fill()
+    turtle.circle(r1)
+    turtle.color(c1)
+    turtle.end_fill()
+    turtle.goto(x2,y2)
+    turtle.begin_fill()
+    turtle.circle(r2)
+    turtle.color(c2)
+    turtle.pendown()
+    turtle.end_fill()
+#draws a rectangle
+def rectangle(x, y, length, h, color):
+    turtle.home()
+    turtle.goto(x,y)
+    turtle.pendown()
+    turtle.color(color)
+    turtle.begin_fill()
+    turtle.forward(h)
+    turtle.right(90)
+    turtle.forward(length)
+    turtle.right(90)
+    turtle.forward(h)
+    turtle.right(90)
+    turtle.forward(length)
+    turtle.right(90)
+    turtle.end_fill()
+#draws a star
+def star(x,y,color,size):
+    turtle.penup()    
+    turtle.goto(x,y)
+    turtle.setheading(0)
+    turtle.pendown()
+    turtle.begin_fill()
+    turtle.color(color)
+    for turn in range(0,5) :
+        turtle.forward(size)
+        turtle.right(144)
+        turtle.forward(size)
+        turtle.right(144)
+    turtle.end_fill()
+    turtle.penup()
+    
+#Draws Tunisia flag
+def tun_flag(x, y, A):
+    rectangle(x, y, A,1.5*A,'red')
+    circle(x+(1.5*A)/2,(y+A/2)-230, A/4, 'white')
+    crescent(x+(1.5*A)/2, (y+A/2)-275, x+(1.5*A)/2 + A/20, (y+A/2)-275, 47,34,'red','white')
+    star((x+(1.5*A)/2)-10,y+(A/2)-235,'red',50)    
+
+tun_flag(0,0,240)
+'''
+#Draws Libya flag
+def lby_flag(x, y, A):
+    rectangle(x, 1+((A*3)/4)+y,(A/4)-2 ,1.5*A-2,'red')
+    rectangle(x,y,A,A*1.5*A,'black')
+    
+
+'''
+'''
+#Draws Turkey flag
+def tur_flag(x, y, A):
+   
+    
+
+
+#Draws singapore flag
+def sgp_flag(x, y, height):
+
+
+
+
+while choice_str == 'Q':
+    turtle.bye()
+    os.exit(1)
+'''
